@@ -20,6 +20,15 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+      '/resolve-domain': {
+        target: 'https://dns.google/resolve',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/resolve-domain/, '')
+      }
+    }
   }
 })
 

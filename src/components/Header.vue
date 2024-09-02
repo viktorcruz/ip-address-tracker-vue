@@ -13,6 +13,21 @@ class CustomError extends Error {
   }
 }
 
+const resolveDomain = async (domain: string): Promise<string | null> => {
+  try{
+    const response = await fetch(`/resolve?name=${domain}`);
+    const data = await response.json();
+    if(data && data.Answer && data.Answer.length > 0){
+      console.log(data.Answer[0].data)
+      return data.Answer[0].data;
+    } else{
+      throw new CustomError(404, 'Domain could not be resolved')
+    }
+  } catch(error){
+    throw new CustomError(500, 'Failed to resolve domain')
+  }
+}
+
 const getIpDetails = async (query: string) => {
   try {
     let ipAddress = query;
@@ -20,17 +35,19 @@ const getIpDetails = async (query: string) => {
 
     if (isNaN(Number(query.split('.').join('')))) {
       // const resolveResponse = await fetch(`http://localhost:3000/resolve?domain=${query}`);
-      const resolveResponse = await fetch(`/api/resolve?domain=${query}`);
-      const resolveData = await resolveResponse.json();
+      // const resolveResponse = await fetch(`/api/resolve?domain=${query}`);
+      const resolveIp = await resolveDomain(query);
 
-      console.log(JSON.stringify(resolveResponse))
+      // const resolveData = await resolveResponse.json();
 
-      if (resolveData.error) {
-        console.log('Error resolving domain:', resolveData.error);
-        throw new Error('Could not resolve the domain');
+      // console.log(JSON.stringify(resolveResponse))
+
+      if (!resolveIp) {
+        console.log('Error resolving domain');
+        throw new CustomError(400, 'Could not resolve the domain');
       }
 
-      ipAddress = resolveData.ip;
+      ipAddress = resolveIp;
     }
 
     const response = await fetch(`https://ipapi.co/${ipAddress}/json/`);
