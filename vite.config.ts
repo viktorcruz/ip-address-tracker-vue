@@ -8,6 +8,13 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.ts': 'ts',
+      }
+    },
+  },
   base: '/',
   resolve: {
     alias: {
