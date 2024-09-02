@@ -23,6 +23,8 @@ const getIpDetails = async (query: string) => {
       const resolveResponse = await fetch(`/api/resolve?domain=${query}`);
       const resolveData = await resolveResponse.json();
 
+      console.log(JSON.stringify(resolveResponse))
+
       if (resolveData.error) {
         console.log('Error resolving domain:', resolveData.error);
         throw new Error('Could not resolve the domain');
@@ -81,7 +83,7 @@ const getIpDetails = async (query: string) => {
 <style scoped>
 .header-container {
   min-height: 281px;
-  background-image: url('../../public/images/pattern-bg-desktop.png');
+  background-image: url('/images/pattern-bg-desktop.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

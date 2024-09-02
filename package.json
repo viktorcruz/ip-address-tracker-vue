@@ -12,6 +12,7 @@
   "dependencies": {
     "@vercel/node": "^3.2.10",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "cors": "^2.8.5",
     "leaflet": "^1.9.4",
     "vue": "^3.4.37"
   },
