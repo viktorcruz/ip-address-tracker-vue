@@ -89,7 +89,7 @@ export default defineComponent({
   }
   
   .ip-tracker__result p {
-    font-size: 20px;
+    font-size: 18px;
     letter-spacing: 2px;
     line-height: 1.2;
   }
