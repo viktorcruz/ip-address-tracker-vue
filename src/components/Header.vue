@@ -14,16 +14,16 @@ class CustomError extends Error {
 }
 
 const resolveDomain = async (domain: string): Promise<string | null> => {
-  try{
-    const response = await fetch(`/resolve?name=${domain}`);
+  try {
+    const response = await fetch(`https://ip-address-tracker-vue-backend.onrender.com/resolve?domain=${domain}`);
     const data = await response.json();
-    if(data && data.Answer && data.Answer.length > 0){
-      console.log(data.Answer[0].data)
-      return data.Answer[0].data;
-    } else{
+
+    if (data && data.ip) {
+      return data.ip;
+    } else {
       throw new CustomError(404, 'Domain could not be resolved')
     }
-  } catch(error){
+  } catch (error) {
     throw new CustomError(500, 'Failed to resolve domain')
   }
 }
@@ -34,16 +34,9 @@ const getIpDetails = async (query: string) => {
     errorMessage.value = null;
 
     if (isNaN(Number(query.split('.').join('')))) {
-      // const resolveResponse = await fetch(`http://localhost:3000/resolve?domain=${query}`);
-      // const resolveResponse = await fetch(`/api/resolve?domain=${query}`);
       const resolveIp = await resolveDomain(query);
 
-      // const resolveData = await resolveResponse.json();
-
-      // console.log(JSON.stringify(resolveResponse))
-
       if (!resolveIp) {
-        console.log('Error resolving domain');
         throw new CustomError(400, 'Could not resolve the domain');
       }
 
@@ -54,7 +47,6 @@ const getIpDetails = async (query: string) => {
     const data = await response.json();
 
     if (data.error || data.resolved) {
-      console.log('Error fetching IP details: ', data.reason || 'Reserved IP address');
       throw new Error(data.reason || 'IP address is reserved or cannot be found');
     }
 
